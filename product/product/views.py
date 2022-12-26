@@ -1,48 +1,44 @@
-from product.models import PrModel
+from product.models import Product
 from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers import serialize
 import json
 
-@csrf_exempt
-def showpr(request, format=None):
+def show_product(request, format=None):
     if(request.method == "GET"):
-        showall=json.loads(serialize("json",PrModel.objects.all()))
-        return JsonResponse({'products': showall})
+        showall=json.loads(serialize("json",Product.objects.all()))
+        return HttpResponse(showall)
 
-    elif(request.method == "POST"):
+def post(request):
         request_data = json.loads(request.body.decode('utf-8'))
-        request_data.get('prname') and request_data.get('prcolor') and request_data.get('price')
-        saverecord=PrModel()
-        saverecord.prname=request_data.get('prname')
-        saverecord.prcolor=request_data.get('prcolor')
+        saverecord=Product()
+        saverecord.name=request_data.get('name')
+        saverecord.color=request_data.get('color')
         saverecord.price=request_data.get('price')
         saverecord.save()
         return HttpResponse(request)
 
-@csrf_exempt
-def get(request, id):
-    showall=json.loads(serialize("json",PrModel.objects.filter(id=id)))
-    return JsonResponse(showall,safe=False)
 
-@csrf_exempt
+def get(request, id):
+    showall=json.loads(serialize("json",Product.objects.filter(id=id)))
+    return HttpResponse(showall)
+
+
 def put(request, id):
     print ("hello")
     request_data = json.loads(request.body.decode('utf-8'))
-    request_data.get('prname') and request_data.get('prcolor') and request_data.get('price')
-    saverecord = PrModel.objects.get(id=id)
-    saverecord.prname=request_data.get('prname')
-    saverecord.prcolor=request_data.get('prcolor')
+    saverecord = Product.objects.get(id=id)
+    saverecord.name=request_data.get('name')
+    saverecord.color=request_data.get('color')
     saverecord.price=request_data.get('price')
     saverecord.save()
-    return HttpResponse(request,)    
+    return HttpResponse(request)    
 
-@csrf_exempt
+
 def delete(request, id):
     try:
-        saverecord = PrModel.objects.get(id=id)
+        saverecord = Product.objects.get(id=id)
         saverecord.delete()
         return JsonResponse({"deleted": True}, safe=False)
     except:
