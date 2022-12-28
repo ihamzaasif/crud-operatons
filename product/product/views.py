@@ -24,7 +24,7 @@ def get(request, id):
         showall=json.loads(serialize("json",Product.objects.filter(id=id)))
         return HttpResponse(showall)
     except:
-        return JsonResponse({"error": "The id you are giveng to  does not exist"}, safe=False)
+        return JsonResponse({"error": "The id you are giveng to does not exist"})
 
 
 def put(request, id):
