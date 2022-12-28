@@ -1,6 +1,5 @@
 from product.models import Product
 from django.shortcuts import render
-from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.core.serializers import serialize
 import json
@@ -21,19 +20,24 @@ def post(request):
 
 
 def get(request, id):
-    showall=json.loads(serialize("json",Product.objects.filter(id=id)))
-    return HttpResponse(showall)
+    try:
+        showall=json.loads(serialize("json",Product.objects.filter(id=id)))
+        return HttpResponse(showall)
+    except:
+        return JsonResponse({"error": "The id you are giveng to  does not exist"}, safe=False)
 
 
 def put(request, id):
-    print ("hello")
-    request_data = json.loads(request.body.decode('utf-8'))
-    saverecord = Product.objects.get(id=id)
-    saverecord.name=request_data.get('name')
-    saverecord.color=request_data.get('color')
-    saverecord.price=request_data.get('price')
-    saverecord.save()
-    return HttpResponse(request)    
+    try:
+        request_data = json.loads(request.body.decode('utf-8'))
+        saverecord = Product.objects.get(id=id)
+        saverecord.name=request_data.get('name')
+        saverecord.color=request_data.get('color')
+        saverecord.price=request_data.get('price')
+        saverecord.save()
+        return HttpResponse(request)
+    except:
+        return JsonResponse({"error": "the id you are giveng to change does not exist"}, safe=False)  
 
 
 def delete(request, id):
@@ -42,7 +46,7 @@ def delete(request, id):
         saverecord.delete()
         return JsonResponse({"deleted": True}, safe=False)
     except:
-        return JsonResponse({"error": "not a valid primary key"}, safe=False)
+        return JsonResponse({"error": "given id does not exist"}, safe=False)
 
 
     

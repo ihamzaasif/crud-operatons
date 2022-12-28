@@ -20,8 +20,8 @@ from .import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.show_product, name="product"),
-    path('post/',views.post, name="post"),
-    path('get/<int:id>/', views.get, name="get"),
-    path('put/<int:id>/', views.put, name="put"),
+    path('post/',views.post, name="add_product"),
+    path('get/<int:id>/', views.get, name="get_product"),
+    path('put/<int:id>/', views.put, name="update_product"),
     path('delete/<int:id>/', views.delete, name="delete"),
 ]
