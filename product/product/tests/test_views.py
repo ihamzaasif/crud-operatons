@@ -1,6 +1,5 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.http import HttpResponse, JsonResponse
 from product.models import Product
 import json
 
@@ -37,7 +36,7 @@ class TestProductViews(TestCase):
     def test_get_product(self):
         response = self.client.get(f'/product/{self.product_id}/')
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(json.loads(), [self.data])
+        self.assertEqual(json.loads(response.self), [self.data])
 
     def test_put_product(self):
         self.data2['id'] = self.product_id
