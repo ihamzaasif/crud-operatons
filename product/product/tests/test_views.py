@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.http import HttpResponse, JsonResponse
 from product.models import Product
 import json
 
@@ -15,23 +16,28 @@ class TestProductViews(TestCase):
             'color': 'Red',
             'price': 5
         }
+        self.data3 = {
+            'name': 'Book',
+            'color': 'Black',
+            'price': 25
+        }
         Product.objects.create(**self.data)
         self.product_id = Product.objects.get(**self.data).id
 
     def test_show_product_GET(self):
         response = self.client.get('/product/')
         self.assertEquals(response.status_code, 404)
-        self.assertEquals(json.loads(response.Product),[self.data2])
+        self.assertEquals([self.data],[self.data3])
 
     def test_post_product(self):
         response = self.client.post('add_product', data=json.dumps(self.data2), content_type='application/json')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(Product.objects.count(), 1)
 
-    # def test_get_product(self):
-    #     response = self.client.get(f'/product/{self.product_id}/')
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(json.loads(response.content), [self.data])
+    def test_get_product(self):
+        response = self.client.get(f'/product/{self.product_id}/')
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(json.loads(), [self.data])
 
     def test_put_product(self):
         self.data2['id'] = self.product_id
