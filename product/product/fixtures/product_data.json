@@ -1,0 +1,21 @@
+[
+    {
+        "model": "product.product", 
+        "pk": 1, 
+        "fields": {
+            "name": "LCD", 
+            "color": "HD", 
+            "price": 4444
+        }
+    },
+
+    {
+        "model": "product.product", 
+        "pk": 2, 
+        "fields": {
+            "name": "Circut Board", 
+            "color": "Green", 
+            "price": 7777
+        }
+    }
+]
