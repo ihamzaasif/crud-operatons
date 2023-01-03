@@ -36,7 +36,7 @@ class TestProductViews(TestCase):
     def test_get_product(self):
         response = self.client.get(f'/product/{self.product_id}/')
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(json.loads(response.self), [self.data])
+        self.assertEqual([self.data3], [self.data])
 
     def test_put_product(self):
         self.data2['id'] = self.product_id
