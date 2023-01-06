@@ -1,10 +1,14 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from product.models import Product
+from django.core.management import call_command
 import json
 
 class TestProductViews(TestCase):
+    fixtures = ['product_data.json']
+
     def setUp(self):
+        call_command('loaddata', 'product_data.json')
         self.data = {
             'name': 'Book',
             'color': 'Black',
@@ -20,18 +24,22 @@ class TestProductViews(TestCase):
             'color': 'Black',
             'price': 25
         }
-        Product.objects.create(**self.data)
-        self.product_id = Product.objects.get(**self.data).id
+        Product.objects.create(self.data)
+        self.product_id = Product.objects.get(self.data).id
 
     def test_show_product_GET(self):
-        response = self.client.get('/product/')
+        response = self.client.get('/product/?name=teest')
+        data =response.json()
         self.assertEquals(response.status_code, 404)
-        self.assertEquals([self.data],[self.data3])
+        self.assertEqual(data[0]['name'], 'testproduct')
 
     def test_post_product(self):
+        # create product
         response = self.client.post('add_product', data=json.dumps(self.data2), content_type='application/json')
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 200)
         self.assertEquals(Product.objects.count(), 1)
+        # create product with duplicate data
+        self.assertEqual()
 
     def test_get_product(self):
         response = self.client.get(f'/product/{self.product_id}/')

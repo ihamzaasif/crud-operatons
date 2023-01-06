@@ -18,7 +18,6 @@ def post(request):
         saverecord.save()
         return HttpResponse(request)
 
-
 def get(request, id):
     try:
         showall=json.loads(serialize("json",Product.objects.filter(id=id)))
@@ -47,17 +46,3 @@ def delete(request, id):
         return JsonResponse({"deleted": True}, safe=False)
     except:
         return JsonResponse({"error": "given id does not exist"}, safe=False)
-
-
-    
-        
-
-
-    
-   
-
-
-
-    
-  
-    
