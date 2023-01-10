@@ -8,54 +8,93 @@ class TestProductViews(TestCase):
     fixtures = ['product_data.json']
 
     def setUp(self):
-        call_command('loaddata', 'product_data.json')
-        self.data = {
-            'name': 'Book',
-            'color': 'Black',
-            'price': 25
-        }
-        self.data2 = {
-            'name': 'Notebook',
-            'color': 'Red',
-            'price': 5
-        }
-        self.data3 = {
-            'name': 'Book',
-            'color': 'Black',
-            'price': 25
-        }
-        Product.objects.create(self.data)
-        self.product_id = Product.objects.get(self.data).id
+        Product.objects.create(name="testproduct",color="green", price=10)
+        self.product_id = Product.objects.get(name="testproduct",color="green", price=10).id
 
     def test_show_product_GET(self):
-        response = self.client.get('/product/?name=teest')
-        data =response.json()
-        self.assertEquals(response.status_code, 404)
-        self.assertEqual(data[0]['name'], 'testproduct')
+        response = self.client.get('', name="product")
+        data = response.json()
+        self.assertEquals(response.status_code, 200)
+        expected_data = {'model': 'product.product', 'pk': 1, 'fields': {'name': 'LCD','color': 'HD', 'price':4444}}
+        self.assertEqual(data[0], expected_data)
+
 
     def test_post_product(self):
-        # create product
-        response = self.client.post('add_product', data=json.dumps(self.data2), content_type='application/json')
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(Product.objects.count(), 1)
-        # create product with duplicate data
-        self.assertEqual()
+        data = {'name': 'Book', 'color': 'This is a book', 'price': 10}
+        response = self.client.post('/post/', data=json.dumps(data), content_type='application/json')
+        self.assertEquals(response.status_code, 201)
+        self.assertEquals(Product.objects.count(), 2)
+
+        response = self.client.post('/post/', data=json.dumps(data), content_type='application/json')
+        self.assertEquals(response.status_code, 201)
 
     def test_get_product(self):
-        response = self.client.get(f'/product/{self.product_id}/')
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual([self.data3], [self.data])
+        response = self.client.get(f'get/{id}/{self.product_id}/')
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.data, {'name': 'testproduct', 'color': 'yellow', 'price': 10})
 
     def test_put_product(self):
-        self.data2['id'] = self.product_id
-        response = self.client.put(f'update_product{self.product_id}/', data=json.dumps(self.data2), content_type='application/json')
-        self.assertEquals(response.status_code, 404)
+        data = {'name': 'Book', 'color': 'This is a book', 'price': 10}
+        response = self.client.put(f'/put/{self.product_id}/', data=json.dumps(data), content_type='application/json')
+        self.assertEquals(response.status_code, 200)
         self.assertEquals(Product.objects.get(id=self.product_id).name, 'Book')
 
     def test_delete_product(self):
-        response = self.client.delete(f'delete"{self.product_id}/')
-        self.assertEquals(response.status_code, 404)
-        self.assertEquals(Product.objects.count(), 1)
+        response = self.client.delete(f'/delete/{self.product_id}/')
+        self.assertEquals(response.status_code, 204)
+        self.assertEquals(Product.objects.count(), 2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class TestProductViews(TestCase):
+#     fixtures = ['product_data.json']
+
+#     def setUp(self):
+#         call_command('product_data.json')
+
+#         Product.objects.create(call_command)
+#         self.product_id = Product.objects.get(call_command).id
+
+#     def test_show_product_GET(self):
+#         response = self.client.get('/product/?name=teest')
+#         data =response.json()
+#         self.assertEquals(response.status_code, 404)
+#         self.assertEqual(data[0]['name'], 'testproduct')
+
+#     def test_post_product(self):
+#         # create product
+#         response = self.client.post('add_product', data=json.dumps(self.data2), content_type='application/json')
+#         self.assertEquals(response.status_code, 200)
+#         self.assertEquals(Product.objects.count(), 1)
+#         # create product with duplicate data
+#         self.assertEqual()
+
+#     def test_get_product(self):
+#         response = self.client.get(f'/product/{self.product_id}/')
+#         self.assertEqual(response.status_code, 404)
+#         self.assertEqual([self.data3], [self.data])
+
+#     def test_put_product(self):
+#         self.data2['id'] = self.product_id
+#         response = self.client.put(f'update_product{self.product_id}/', data=json.dumps(self.data2), content_type='application/json')
+#         self.assertEquals(response.status_code, 404)
+#         self.assertEquals(Product.objects.get(id=self.product_id).name, 'Book')
+
+#     def test_delete_product(self):
+#         response = self.client.delete(f'delete"{self.product_id}/')
+#         self.assertEquals(response.status_code, 404)
+#         self.assertEquals(Product.objects.count(), 1)
         
 
 

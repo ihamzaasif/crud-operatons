@@ -7,7 +7,7 @@ import json
 def show_product(request, format=None):
     if(request.method == "GET"):
         showall=json.loads(serialize("json",Product.objects.all()))
-        return HttpResponse(showall)
+        return JsonResponse(showall,safe=False, status=200)
 
 def post(request):
         request_data = json.loads(request.body.decode('utf-8'))
@@ -16,15 +16,14 @@ def post(request):
         saverecord.color=request_data.get('color')
         saverecord.price=request_data.get('price')
         saverecord.save()
-        return HttpResponse(request)
+        return JsonResponse(request,safe=False, status=201)
 
 def get(request, id):
     try:
         showall=json.loads(serialize("json",Product.objects.filter(id=id)))
-        return HttpResponse(showall)
+        return JsonResponse(showall, status=200)
     except:
-        return JsonResponse({"error": "The id you are giveng to does not exist"})
-
+        return JsonResponse({"error": "The id you are giveng to does not exist"}, status=404)
 
 def put(request, id):
     try:
@@ -34,15 +33,14 @@ def put(request, id):
         saverecord.color=request_data.get('color')
         saverecord.price=request_data.get('price')
         saverecord.save()
-        return HttpResponse(request)
+        return JsonResponse(request, status=200)
     except:
-        return JsonResponse({"error": "the id you are giveng to change does not exist"}, safe=False)  
-
+        return JsonResponse({"error": "the id you are giveng to change does not exist"}, status=404, safe=False)  
 
 def delete(request, id):
     try:
         saverecord = Product.objects.get(id=id)
         saverecord.delete()
-        return JsonResponse({"deleted": True}, safe=False)
+        return JsonResponse({"deleted": True}, status=204, safe=False)
     except:
-        return JsonResponse({"error": "given id does not exist"}, safe=False)
+        return JsonResponse({"error": "given id does not exist"}, status=404, safe=False)
