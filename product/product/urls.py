@@ -14,14 +14,39 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from .import views
+from django.urls import path, include
+from product import views
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.show_product, name="product"),
-    path('post/',views.post, name="add_product"),
-    path('get/<int:id>/', views.get, name="get_product"),
-    path('put/<int:id>/', views.put, name="update_product"),
-    path('delete/<int:id>/', views.delete, name="delete"),
+    path('',views.ProductView),
+    path('<int:id>',views.Product_manage)
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from django.contrib import admin
+# from django.urls import path
+# from .import views
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('',views.show_product, name="product"),
+#     path('post/',views.post, name="add_product"),
+#     path('get/<int:id>/', views.get, name="get_product"),
+#     path('put/<int:id>/', views.put, name="update_product"),
+#     path('delete/<int:id>/', views.delete, name="delete"),
+
