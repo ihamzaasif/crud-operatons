@@ -21,7 +21,10 @@ def ProductView(request, format=None):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def Product_manage(request, id, format=None):
-    
+    try:
+        id = int(id)
+    except ValueError:
+        return Response({'error': 'Invalid string type'}, status=status.HTTP_404_NOT_FOUND)
     try:
         product = Product.objects.get(pk=id)
     except Product.DoesNotExist:

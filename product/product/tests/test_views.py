@@ -1,10 +1,10 @@
-from django.test import TestCase, Client
+from rest_framework.test import APITestCase
 from django.urls import reverse
 from product.models import Product
 from django.core.management import call_command
 import json
 
-class TestProductViews(TestCase):
+class TestProductViews(APITestCase):
     fixtures = ['product_data.json']
 
     def setUp(self):
@@ -34,6 +34,11 @@ class TestProductViews(TestCase):
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {'error': 'Product not found'})
 
+        #Test scenario for string type
+        response = self.client.get(f'/ab')
+        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.data, {'error': 'Invalid string type'})
+
     def test_put_product(self):
         data = {'name': 'LCD', 'color': 'HD', 'price': 4444}
         response = self.client.put(f'/{self.product_id}', data=json.dumps(data), content_type='application/json')
@@ -41,10 +46,14 @@ class TestProductViews(TestCase):
         self.assertEquals(Product.objects.get(id=self.product_id).name,'LCD')
 
         #Test scenario for invalid id
-        data = {'name': 'LCD', 'color': 'HD', 'price': 4444}
         response = self.client.put(f'/8', data=json.dumps(data), content_type='application/json')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {'error': 'Product not found'})
+
+        #Test scenario for String type
+        response = self.client.put(f'/abc', data=json.dumps(data), content_type='application/json')
+        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.data, {'error': 'Invalid string type'})
 
     def test_delete_product(self):
         response = self.client.delete(f'/{self.product_id}')
@@ -55,3 +64,8 @@ class TestProductViews(TestCase):
         response = self.client.delete(f'/8')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {'error': 'Product not found'})
+
+        #Test scenario for invalid id
+        response = self.client.delete(f'/ab')
+        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.data, {'error': 'Invalid string type'})
