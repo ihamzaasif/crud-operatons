@@ -25,7 +25,7 @@ def Product_manage(request, id, format=None):
     try:
         product = Product.objects.get(pk=id)
     except Product.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = ProductSerializer(product)
