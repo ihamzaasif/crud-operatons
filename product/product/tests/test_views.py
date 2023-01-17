@@ -51,7 +51,7 @@ class TestProductViews(APITestCase):
         self.assertEquals(response.data, {'error': 'Product not found'})
 
         #Test scenario for String type
-        response = self.client.put(f'/abc', data=json.dumps(data), content_type='application/json')
+        response = self.client.put(f'/ab', data=json.dumps(data), content_type='application/json')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {'error': 'Invalid string type'})
 
