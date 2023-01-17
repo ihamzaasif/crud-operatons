@@ -1,78 +1,103 @@
-from django.http import JsonResponse
-from rest_framework.decorators import api_view
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import mixins
+from rest_framework import generics
 
-@api_view(['GET', 'POST'])
-def ProductView(request, format=None):
 
-    if request.method == 'GET':
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+class ProductView(generics.ListAPIView, APIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
-    if request.method =='POST':
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get(self, request):
+        return self.list(request)
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def Product_manage(request, id, format=None):
-    try:
-        id = int(id)
-    except ValueError:
-        return Response({'error': 'Invalid string type'}, status=status.HTTP_404_NOT_FOUND)
-    try:
-        product = Product.objects.get(pk=id)
-    except Product.DoesNotExist:
-        return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+    def post(self, request):
+        return self.create(request)     
 
-    if request.method == 'GET':
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
+class Product_manage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView, APIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+
+    def put(self, request, pk):
+        return self.update(request, pk)       
+
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @api_view(['GET', 'POST'])
+# def ProductView(request, format=None):
+
+#     if request.method == 'GET':
+#         products = Product.objects.all()
+#         serializer = ProductSerializer(products, many=True)
+#         return Response(serializer.data)
+
+#     if request.method =='POST':
+#         serializer = ProductSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# def Product_manage(request, id, format=None):
+#     try:
+#         id = int(id)
+#     except ValueError:
+#         return Response({'error': 'Invalid string type'}, status=status.HTTP_404_NOT_FOUND)
+#     try:
+#         product = Product.objects.get(pk=id)
+#     except Product.DoesNotExist:
+#         return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#     if request.method == 'GET':
+#         serializer = ProductSerializer(product)
+#         return Response(serializer.data)
     
-    elif request.method == 'PUT':
-        serializer = ProductSerializer(product, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'PUT':
+#         serializer = ProductSerializer(product, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    elif request.method == 'DELETE':
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     elif request.method == 'DELETE':
+#         product.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# --------------------------------------------------
 
 # from product.models import Product
 # from django.shortcuts import render
