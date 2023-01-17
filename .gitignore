@@ -25,6 +25,8 @@ db.sqlite3-journal
 *.so
 
 # Distribution / packaging
+.env
+dec/
 .Python
 build/
 develop-eggs/
