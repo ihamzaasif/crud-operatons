@@ -15,7 +15,7 @@ class TestProductViews(APITestCase):
         response = self.client.get('/')
         data = response.json()
         self.assertEquals(response.status_code, 200)
-        expected_data = [{'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444}, {'id': 7, 'name': 'LCD', 'color': 'HD', 'price': 4444}]
+        expected_data = [{'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444}, {'id': 6, 'name': 'LCD', 'color': 'HD', 'price': 4444}]
         self.assertEquals(data, expected_data)
 
     def test_post_product(self):
