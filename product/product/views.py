@@ -15,7 +15,7 @@ class ProductFilter(django_filters.FilterSet):
         model = Product
         fields = ['name','color']
 
-class ProductView(generics.ListAPIView, APIView):
+class ProductView(generics.ListAPIView,generics.ListCreateAPIView, APIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]

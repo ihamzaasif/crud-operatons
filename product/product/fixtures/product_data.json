@@ -7,7 +7,15 @@
             "color": "HD", 
             "price": 4444
         }
-    }
+    },
 
-    
+    {
+        "model": "product.product", 
+        "pk": 2, 
+        "fields": {
+            "name": "mug", 
+            "color": "green", 
+            "price": 5555
+        }
+    }
 ]
