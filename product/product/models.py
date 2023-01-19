@@ -8,25 +8,25 @@ class Product(models.Model):
     class Meta:
         db_table="pro"
 
+valu = input('Enter the color: ')
+def Color_find():
+    Color_products = Product.objects.filter(color__iexact=valu)
+    if len(Color_products) == 0:
+        print("No product found with this color")
+    else:
+        for product in Color_products:
+            print("ID of the product is " + str(product.pk))
+            print("Product name is " + product.name)
+Color_find()
 
-try:
-    val = input('Enter the color: ')
-    Color_products = Product.objects.filter(color__iexact=val)
-    for product in Color_products:
-        print("ID of the product is " + str(product.pk))
-        print("Product name is " + product.name)
 
-except ObjectDoesNotExist as e:
-    print("No product found with this color: ", e)
-
-try:
-    val = int(input('Enter the Price: '))
-    price_products = Product.objects.filter(price__gt=val)
+def Price_Search():
+    val_for_price = int(input('Enter the Price: '))
+    price_products = Product.objects.filter(price__gt=val_for_price)
     if len(price_products) == 0:
-        raise ValueError("No product found with the entered price: " + val)
+        print("No product found with the entered price: " + str(val_for_price))
     else:
         for product in price_products:
-            print("ID of the product which is greeater then price "+val+" is "+ str(product.pk))
+            print("ID of the product which is greeater then price "+str(val_for_price)+" is "+ str(product.pk))
             print("Product name is " + product.name + "\n Product price " + str(product.price))
-except ValueError as e:
-    print(e)
+Price_Search()
