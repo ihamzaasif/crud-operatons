@@ -1,9 +1,6 @@
 from rest_framework.test import APITestCase
-from django.urls import reverse
 from product.models import Product
-import django_filters
 from django_filters import FilterSet, CharFilter
-from django.core.management import call_command
 import json
 
 class ProductFilter(FilterSet):
