@@ -23,7 +23,7 @@ class TestProductViews(APITestCase):
         filtered_queryset = ProductFilter({'name': 'lcd'}, queryset=queryset).qs
         data1 = filtered_queryset.values()
         self.assertEquals(data1[0], {'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444})
-        
+       
     def test_color_filter(self):
         queryset = Product.objects.all()
         filtered_queryset = ProductFilter({'color': 'hd'}, queryset=queryset).qs

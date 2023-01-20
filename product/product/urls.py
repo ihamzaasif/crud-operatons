@@ -22,32 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.ProductView.as_view()),
     path('<int:pk>',views.Product_manage.as_view()),
+    path('products/', views.ProductView.as_view(), name='product_list'),
     path('<str:pk>', views.Product_manage.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from django.contrib import admin
-# from django.urls import path
-# from .import views
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('',views.show_product, name="product"),
-#     path('post/',views.post, name="add_product"),
-#     path('get/<int:id>/', views.get, name="get_product"),
-#     path('put/<int:id>/', views.put, name="update_product"),
-#     path('delete/<int:id>/', views.delete, name="delete"),
-
