@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.ProductView.as_view()),
     path('<int:pk>',views.Product_manage.as_view()),
-    path('products/', views.ProductView.as_view(), name='product_list'),
     path('<str:pk>', views.Product_manage.as_view())
 ]
 
