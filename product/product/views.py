@@ -13,9 +13,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 class ProductFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
     color = django_filters.CharFilter(lookup_expr='icontains')
+    price = django_filters.NumberFilter(lookup_expr='exact')
     class Meta:
         model = Product
-        fields = ['name','color']
+        fields = ['name','color','price']
 
 class ProductView(ListAPIView, CreateAPIView):
     queryset = Product.objects.all()

@@ -8,36 +8,46 @@ class ProductFilter(FilterSet):
     class Meta:
         model = Product
         fields = ['name']
-    
+
 class TestProductViews(APITestCase):
     fixtures = ['product_data.json']
 
     def setUp(self):
         self.product_id = Product.objects.get(pk=1).pk
 
-    def test_name_filter(self):
-        queryset = Product.objects.all()
-        filtered_queryset = ProductFilter({'name': 'lcd'}, queryset=queryset).qs
-        data1 = filtered_queryset.values()
-        self.assertEquals(data1[0], {'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444})
-       
-    def test_color_filter(self):
-        queryset = Product.objects.all()
-        filtered_queryset = ProductFilter({'color': 'hd'}, queryset=queryset).qs
-        data1 = filtered_queryset.values()
-        self.assertEquals(data1[0], {'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444})
-
-    def test_combined_filter(self):
-        queryset = Product.objects.all()
-        filtered_queryset = ProductFilter({'name': 'LCD', 'color': 'HD'}, queryset=queryset).qs
-        data1 = filtered_queryset.values()
-        self.assertEquals(data1[0], {'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444})
-
     def test_show_product_GET(self):
         response = self.client.get('/')
         data = response.json()
         self.assertEquals(response.status_code, 200)
         expected_data = [{'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444},{'id': 2, 'name': 'mug', 'color': 'green', 'price': 5555}]
+        self.assertEquals(data, expected_data)
+
+        #Test scenario for getting product by name
+        response = self.client.get('/', {'name': 'lcd'})
+        data = response.json()
+        self.assertEquals(response.status_code, 200)
+        expected_data = [{'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444}]
+        self.assertEquals(data, expected_data)
+
+        #Test scenario for getting product by their color
+        response = self.client.get('/', {'color': 'green'})
+        data = response.json()
+        self.assertEquals(response.status_code, 200)
+        expected_data = [{'id': 2, 'name': 'mug', 'color': 'green', 'price': 5555}]
+        self.assertEquals(data, expected_data)
+
+        #Test scenario for getting product by both name and color
+        response = self.client.get('/', {'name': 'mug', 'color': 'green'})
+        data = response.json()
+        self.assertEquals(response.status_code, 200)
+        expected_data = [{'id': 2, 'name': 'mug', 'color': 'green', 'price': 5555}]
+        self.assertEquals(data, expected_data)
+
+        #Test scenario for getting product by price
+        response = self.client.get('/', {'price': 5555})
+        data = response.json()
+        self.assertEquals(response.status_code, 200)
+        expected_data = [{'id': 2, 'name': 'mug', 'color': 'green', 'price': 5555}]
         self.assertEquals(data, expected_data)
 
     def test_post_product(self):
@@ -91,8 +101,3 @@ class TestProductViews(APITestCase):
         response = self.client.delete(f'/ab')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {"detail": "Not found."})
-
-
-
-
-

@@ -22,7 +22,6 @@ class Product(models.Model):
 
 valu = input('Enter the color: ')
 products = Product.object_color.get_queryset(valu)
-
 if not products:
     print("No product found with this color")
 else:
