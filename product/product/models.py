@@ -42,4 +42,3 @@ else:
         print("Product name is " + product.name)
         print("product color is " + product.color)
         print("product color is " + str(product.price))
-
