@@ -1,43 +1,39 @@
 from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 
+class GetQuerySet(models.QuerySet):
+    def get_queryset(self):
+        return super().get_queryset().filter(color__iexact="red")
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(price__gt=200)
+        
 class SearchColor(models.Manager):
-    def get_queryset(self, valu=None):
+    def get_queryset(self):
+        return GetQuerySet(self.model, using=self._db)
+
+    def gets(self, valu=None):
         return super().get_queryset().filter(color__iexact=valu)
+    
+    def get_queryset(self):
+        return Product.objects.filter(price__gt=50,color="red").order_by('name').limit(5)
 
 class SearchPrice(models.Manager):
+    def get_queryset(self):
+        return GetQuerySet(self.model, using=self._db)
+
     def get_queryset(self, valu_for_price=None):
         return super().get_queryset().filter(price__gt=valu_for_price)
-        
-        
+
 class Product(models.Model):
     name=models.CharField(max_length=100)
     color=models.CharField(max_length=100)
     price=models.IntegerField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
     class Meta:
         db_table="pro"
+
     objects = models.Manager()
     object_color = SearchColor()
     object_price = SearchPrice()
-
-valu = input('Enter the color: ')
-products = Product.object_color.get_queryset(valu)
-if not products:
-    print("No product found with this color")
-else:
-    for product in products:
-        print("ID of the product is " + str(product.pk))
-        print("Product name is " + product.name)
-        print("Product price is"+ str(product.price))
-
-
-valu_for_price = input('\n Enter the price: ')
-products1 = Product.object_price.get_queryset(valu_for_price)
-if not products1:
-    print("No product found with the given price")
-else:
-    for product in products1:
-        print("ID of the product is " + str(product.pk))
-        print("Product name is " + product.name)
-        print("product color is " + product.color)
-        print("product color is " + str(product.price))
