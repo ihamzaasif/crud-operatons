@@ -17,11 +17,6 @@ class ProductFilter(django_filters.FilterSet):
         model = Product
         fields = ['name','color','price']
 
-# def view_related_products(request):
-#     queryset = Product.objects.all().select_related('user')
-#     serializer = ProductSerializer(queryset, many=True)
-#     return Response(serializer.data)
-
 class ProductView(ListAPIView, CreateAPIView):
     queryset = Product.objects.all().select_related('user')
     serializer_class = ProductSerializer
