@@ -23,6 +23,7 @@ urlpatterns = [
     path('',views.ProductView.as_view()),
     path('<int:pk>',views.ProductManage.as_view()),
     path('<str:pk>', views.ProductManage.as_view())
+    # path('view-related-products/<str:pk>', views.view_related_products, name='view-related-products')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -24,16 +24,21 @@ class SearchPrice(models.Manager):
 
     def get_queryset(self, valu_for_price=None):
         return super().get_queryset().filter(price__gt=valu_for_price)
+        
+def get_default_user():
+    return User.objects.get(username='username').pk
 
 class Product(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user)
     name=models.CharField(max_length=100)
     color=models.CharField(max_length=100)
     price=models.IntegerField()
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-
     class Meta:
         db_table="pro"
+
+ 
 
     objects = models.Manager()
     object_color = SearchColor()
     object_price = SearchPrice()
+
