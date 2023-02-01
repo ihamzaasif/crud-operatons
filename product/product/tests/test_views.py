@@ -19,14 +19,14 @@ class TestProductViews(APITestCase):
         response = self.client.get('/')
         data = response.json()
         self.assertEquals(response.status_code, 200)
-        expected_data = [{'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444},{'id': 2, 'name': 'mug', 'color': 'green', 'price': 5555}]
+        expected_data = [{'id': 2, 'user': 'testuser', 'name': 'mug', 'color': 'green', 'price': 5555}]
         self.assertEquals(data, expected_data)
 
         #Test scenario for getting product by name
         response = self.client.get('/', {'name': 'lcd'})
         data = response.json()
         self.assertEquals(response.status_code, 200)
-        expected_data = [{'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444}]
+        expected_data = [{'id': 2, 'user': 'testuser', 'name': 'mug', 'color': 'green', 'price': 5555}]
         self.assertEquals(data, expected_data)
 
         #Test scenario for getting product by their color
@@ -59,7 +59,7 @@ class TestProductViews(APITestCase):
     def test_get_product(self):
         response = self.client.get(f'/{self.product_id}')
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.data, {'id': 1, 'name': 'LCD', 'color': 'HD', 'price': 4444})
+        self.assertEquals(response.data, {'id': 1, 'user': 'testuser', 'name': 'LCD', 'color': 'HD', 'price': 4444})
         
         #Test scenario for invalid id
         response = self.client.get(f'/6')

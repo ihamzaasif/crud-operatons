@@ -1,4 +1,4 @@
-from .models import Product
+from .models import Product,GetQuerySet
 from .serializers import ProductSerializer
 from rest_framework.views import APIView
 from rest_framework import mixins
@@ -18,7 +18,9 @@ class ProductFilter(django_filters.FilterSet):
         fields = ['name','color','price']
 
 class ProductView(ListAPIView, CreateAPIView):
-    queryset = Product.objects.all().select_related('user')
+    
+    queryset = Product.objects.filter_by_color_and_price()
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProductFilter
@@ -27,13 +29,12 @@ class ProductView(ListAPIView, CreateAPIView):
     def get(self, request):
         return self.list(request)
 
-
     def post(self, request):
         return self.create(request)     
 
-    
 class ProductManage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView, APIView):
-    queryset = Product.objects.all().prefetch_related('user')
+    queryset = Product.objects.select_related('user').filter(user__username='username')
+    queryset = Product.objects.prefetch_related('user')
     serializer_class = ProductSerializer
 
     def get(self, request, pk):

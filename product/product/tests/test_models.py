@@ -1,10 +1,13 @@
 from django.test import TestCase
 from product.models import Product
+from django.contrib.auth.models import User
+
 
 class ProductTestCase(TestCase):
     def setUp(self):
-        Product.objects.create(name="Product 1", color="Red", price=10)
-        Product.objects.create(name="Product 2", color="Blue", price=20)
+        user = User.objects.create_user(username="username", password="password")
+        Product.objects.create(name="Product 1", color="Red", price=10, user=user)
+        Product.objects.create(name="Product 2", color="Blue", price=20, user=user)
 
     def test_products_have_correct_names(self):
         product_1 = Product.objects.get(name="Product 1")

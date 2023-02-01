@@ -1,11 +1,21 @@
 [
     {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "password": "pbkdf2_sha256$36000$r2fZjKrZl8mU$mEJ/quIf13zug9XdI23xFxrffQrpxrKvyJnQzwsN6g0="
+        }
+    },
+    {
         "model": "product.product", 
         "pk": 1, 
         "fields": {
             "name": "LCD", 
             "color": "HD", 
-            "price": 4444
+            "price": 4444,
+            "user_id": 1
         }
     },
 
@@ -15,7 +25,8 @@
         "fields": {
             "name": "mug", 
             "color": "green", 
-            "price": 5555
+            "price": 5555,
+            "user_id": 1
         }
     }
 ]

@@ -1,0 +1,23 @@
+[
+    {
+        "model": "auth.User",
+        "id": 1,
+        "fields": {
+            "username": "ahmad",
+            "first_name": "ahmad",
+            "last_name": "hassan",
+            "email": "ahmad@hassan.com"
+        }
+    },
+
+    {
+        "model": "auth.User",
+        "id": 2, 
+        "fields": {
+            "username": "awais",
+            "first_name": "awais",
+            "last_name": "feroz",
+            "email": "awais@feroz.com"
+        }
+    }
+]

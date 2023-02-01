@@ -2,11 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class GetQuerySet(models.QuerySet):
-    def get_queryset(self):
-        return super().get_queryset().filter(color__iexact="red")
-    
-    def get_queryset(self):
-        return super().get_queryset().filter(price__gt=200)
+    def filter_by_color_and_price(self):
+        return self.filter(color__iexact="green").filter(price__gt=2000)   
         
 class SearchColor(models.Manager):
     def get_queryset(self):
@@ -26,7 +23,11 @@ class SearchPrice(models.Manager):
         return super().get_queryset().filter(price__gt=valu_for_price)
         
 def get_default_user():
-    return User.objects.get(username='username').pk
+    try:
+        return User.objects.get(username='username').pk
+    except User.DoesNotExist:
+        return None
+
 
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user)
@@ -37,8 +38,6 @@ class Product(models.Model):
         db_table="pro"
 
  
-
-    objects = models.Manager()
+    objects = GetQuerySet.as_manager()
     object_color = SearchColor()
     object_price = SearchPrice()
-
