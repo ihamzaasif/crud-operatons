@@ -17,14 +17,18 @@ from django.contrib import admin
 from django.urls import path, include
 from product import views
 from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf import settings
+import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.ProductView.as_view()),
     path('<int:pk>',views.ProductManage.as_view()),
     path('<str:pk>', views.ProductManage.as_view()),
-    path('', include('user.urls'))
-    # path('view-related-products/<str:pk>', views.view_related_products, name='view-related-products')
+    path('', include('user.urls')),
+    path('__debug__/', include(debug_toolbar.urls))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
+
+

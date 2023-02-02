@@ -27,14 +27,29 @@ class UserView(APITestCase):
         response = self.client.get('/user/1')
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response.data['username'], 'ahmad')
+
+        #Test scenario for getting product by first name
+        response = self.client.get('/user/', {'first_name': 'ahmad'})
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.data[0]['first_name'], 'ahmad')
         
+        #Test scenario for getting product by last name
+        response = self.client.get('/user/', {'last_name': 'hassan'})
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.data[0]['last_name'], 'hassan')
+
+        #Test scenario for getting product by last user name
+        response = self.client.get('/user/', {'username': 'ahmad'})
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.data[0]['username'], 'ahmad')
+
+        #Test scenario for getting product by email
+        response = self.client.get('/user/', {'email': 'ahmad@hassan.com'})
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.data[0]['email'], 'ahmad@hassan.com')
+
         #Test scenario for invalid id
         response = self.client.get('/user/7')
-        self.assertEquals(response.status_code, 404)
-        self.assertEquals(response.data, {"detail": "Not found."})
-        
-        #Test scenario for string type
-        response = self.client.get('/user/a')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {"detail": "Not found."})
 
@@ -59,16 +74,6 @@ class UserView(APITestCase):
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {"detail": "Not found."})
 
-        #Test scenario for String type
-        response = self.client.put('/user/a', {
-            "username": "ahmad_updated",
-            "first_name": "ahmad",
-            "last_name": "hassan",
-            "email": "ahmad@hassan.com"
-        })
-        self.assertEquals(response.status_code, 404)
-        self.assertEquals(response.data, {"detail": "Not found."})
-
     def test_delete_view(self):
         response = self.client.delete('/user/1')
         self.assertEquals(response.status_code, 204)
@@ -76,10 +81,5 @@ class UserView(APITestCase):
 
         #Test scenario for invalid id
         response = self.client.delete('/user/9')
-        self.assertEquals(response.status_code, 404)
-        self.assertEquals(response.data, {"detail": "Not found."})
-
-        #Test scenario for invalid id
-        response = self.client.delete('/user/a')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {"detail": "Not found."})

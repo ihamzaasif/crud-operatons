@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'product',
     'rest_framework',
     'django_filters',
+    'debug_toolbar',
     'django.contrib.auth.apps.AuthConfig',
     'user'
 ]
@@ -58,8 +59,14 @@ MIDDLEWARE = [
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 
 ROOT_URLCONF = 'product.urls'
 
