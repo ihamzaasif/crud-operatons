@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django_filters',
     'debug_toolbar',
     'django.contrib.auth.apps.AuthConfig',
-    'user'
+    'user',
+    'django_admin_listfilter_dropdown',
 ]
 
 MIDDLEWARE = [
