@@ -8,6 +8,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.generics import CreateAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
+from django.core.cache import cache
 
 class ProductFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')

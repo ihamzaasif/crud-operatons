@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.auth.apps.AuthConfig',
     'user',
     'django_admin_listfilter_dropdown',
+    'redis',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +102,16 @@ DATABASES = {
         'PASSWORD': env("DATABASE_PASSWORD"),
         'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
+    }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
