@@ -28,7 +28,13 @@ class ProductView(ListAPIView, CreateAPIView):
     
 
     def get(self, request):
-        return self.list(request)
+        cache_key = "product_list"
+        result = cache.get(cache_key)
+        if result:
+            return Response(result)
+        result = self.list(request)
+        cache.set(cache_key, result.data, timeout=3600)
+        return result
 
     def post(self, request):
         return self.create(request)     
@@ -40,6 +46,17 @@ class ProductManage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
 
     def get(self, request, pk):
         return self.retrieve(request, pk)
+
+    def get(self, request, pk):
+        cache_key = f"product_{pk}"
+        result = cache.get(cache_key)
+        print("redis")
+        if result:
+            return Response(result)
+        result = self.retrieve(request, pk)
+        cache.set(cache_key, result.data, timeout=3600)
+        print("database")
+        return result
 
     def put(self, request, pk):
         return self.update(request, pk)       
