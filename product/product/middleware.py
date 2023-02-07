@@ -13,3 +13,8 @@ class CacheMiddleware:
         if product:
             print("middle ware cache called")
             return response
+
+        if response.status_code == 200:
+            cache.set(cache_key, response.data, timeout=3600)
+            print("middle ware cache called but response of the data is set into it")
+            return response
