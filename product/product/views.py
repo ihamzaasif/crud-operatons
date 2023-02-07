@@ -27,7 +27,7 @@ class ProductView(ListAPIView, CreateAPIView):
     filterset_class = ProductFilter
     
 
-    def get(self, request):
+    def get(self, request, pk=None):
         cache_key = "product_list"
         result = cache.get(cache_key)
         if result:
@@ -43,9 +43,6 @@ class ProductManage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
     queryset = Product.objects.select_related('user').filter(user__username='username')
     queryset = Product.objects.prefetch_related('user')
     serializer_class = ProductSerializer
-
-    def get(self, request, pk):
-        return self.retrieve(request, pk)
 
     def get(self, request, pk):
         cache_key = f"product_{pk}"
