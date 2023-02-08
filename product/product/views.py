@@ -9,6 +9,8 @@ from rest_framework.generics import CreateAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from django.core.cache import cache
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class ProductFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
@@ -25,7 +27,8 @@ class ProductView(ListAPIView, CreateAPIView):
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProductFilter
-    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None):
         cache_key = "product_list"
@@ -43,6 +46,8 @@ class ProductManage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
     queryset = Product.objects.select_related('user').filter(user__username='username')
     queryset = Product.objects.prefetch_related('user')
     serializer_class = ProductSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         cache_key = f"product_{pk}"

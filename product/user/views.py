@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
 from .serializers import UserSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class UserFilter(django_filters.FilterSet):
     id = django_filters.NumberFilter(lookup_expr='exact')
@@ -20,6 +22,8 @@ class UserList(mixins.ListModelMixin,mixins.CreateModelMixin,generics.GenericAPI
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = UserFilter
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         return self.list(request)
@@ -32,6 +36,8 @@ class UserDetail(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.Destro
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = UserFilter
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, pk):
         return self.retrieve(request, pk)

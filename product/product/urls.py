@@ -19,12 +19,17 @@ from product import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf import settings
 import debug_toolbar
+from rest_framework_simplejwt import views as jwt_views
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.ProductView.as_view()),
     path('<int:pk>',views.ProductManage.as_view()),
     path('<str:pk>', views.ProductManage.as_view()),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),    
     path('', include('user.urls')),
     path('__debug__/', include(debug_toolbar.urls))
 ]
