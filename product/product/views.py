@@ -29,7 +29,11 @@ class ProductView(ListAPIView, CreateAPIView):
     filterset_class = ProductFilter
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Product.objects.filter(user_id=user_id).select_related('user').prefetch_related('user')
+        
     def get(self, request, pk=None):
         cache_key = "product_list"
         result = cache.get(cache_key)
@@ -43,11 +47,13 @@ class ProductView(ListAPIView, CreateAPIView):
         return self.create(request)     
 
 class ProductManage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView, APIView):
-    queryset = Product.objects.select_related('user').filter(user__username='username')
-    queryset = Product.objects.prefetch_related('user')
     serializer_class = ProductSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Product.objects.filter(user_id=user_id).select_related('user').prefetch_related('user')
 
     def get(self, request, pk):
         cache_key = f"product_{pk}"

@@ -9,11 +9,19 @@ class CacheMiddleware:
         pk = kwargs.get('pk')
         cache_key = f"product_{pk}"
         product = cache.get(cache_key)
+        
         response = self.get_response(request, *args, **kwargs)
+        
+        if hasattr(response, 'data'):
+            content = response.data
+        else:
+            content = response.content
+        
         if product:
             print("middle ware cache called")
             return response
 
         if response.status_code == 200:
-            cache.set(cache_key, response.data, timeout=3600)
-            return response
+            cache.set(cache_key, content, timeout=3600)
+        
+        return response

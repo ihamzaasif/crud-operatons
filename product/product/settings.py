@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import datetime
 from pathlib import Path
 from decouple import config
 import environ
@@ -97,6 +98,11 @@ REST_FRAMEWORK = {
     ],
 }
 
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=365),
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
