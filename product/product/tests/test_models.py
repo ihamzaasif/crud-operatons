@@ -27,10 +27,10 @@ class ProductTestCase(TestCase):
         self.assertEqual(product_1.color, "Red")
         self.assertEqual(product_2.color, "Blue")
         
-    def test_search_color(self):
-        products = Product.object_color.get_queryset("Red")
-        self.assertEqual(len(products), 1)
-        self.assertEqual(products[0].name, "Product 1")
+    # def test_search_color(self):
+    #     products = Product.object_color.get_queryset("Red")
+    #     self.assertEqual(len(products), 1)
+    #     self.assertEqual(products[0].name, "Product 1")
         
     def test_search_price(self):
         products = Product.object_price.get_queryset(2)

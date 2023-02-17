@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from django.core.cache import cache
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import AuthenticationFailed
 
 class ProductFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
@@ -22,7 +23,6 @@ class ProductFilter(django_filters.FilterSet):
 
 class ProductView(ListAPIView, CreateAPIView):
     
-    queryset = Product.objects.filter_by_color_and_price()
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
@@ -31,6 +31,8 @@ class ProductView(ListAPIView, CreateAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            raise AuthenticationFailed()
         user_id = self.request.user.id
         return Product.objects.filter(user_id=user_id).select_related('user').prefetch_related('user')
         
@@ -43,6 +45,7 @@ class ProductView(ListAPIView, CreateAPIView):
         cache.set(cache_key, result.data, timeout=3600)
         return result
 
+
     def post(self, request):
         return self.create(request)     
 
@@ -52,6 +55,8 @@ class ProductManage(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.D
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            raise AuthenticationFailed()
         user_id = self.request.user.id
         return Product.objects.filter(user_id=user_id).select_related('user').prefetch_related('user')
 

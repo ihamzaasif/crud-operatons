@@ -97,10 +97,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes= 120),
-    'REFRESH_TOKENLIFETIME':datetime.timedelta(days=7)
-}
+
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes= 120),
+#     'REFRESH_TOKENLIFETIME':datetime.timedelta(days=7)
+# }
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
