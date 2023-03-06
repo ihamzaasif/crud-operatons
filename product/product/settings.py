@@ -14,6 +14,7 @@ import datetime
 from pathlib import Path
 from decouple import config
 import environ
+import os
 
 env = environ.Env()
 # reading .env file
@@ -34,8 +35,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG=config('DEBUG',default=False,cast=bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
 # Application definition
 
