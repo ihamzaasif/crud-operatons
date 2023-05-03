@@ -129,8 +129,6 @@ class TestProductViews(APITestCase):
         self.assertIsNone(Product.objects.filter(id=self.product_id).first())
         response = self.client.delete(f'/{self.product_id}')
 
-
-
 class CeleryTestCase(APITestCase):
     def test_add_task(self):
         result = add.delay(2, 2)
