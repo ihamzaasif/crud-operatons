@@ -1,5 +1,18 @@
-version: '3'
+version: '3.8'
+
 services:
+  redis:
+    image: redis
+    env_file:
+      - /home/hamza/Desktop/wor/product/product/.env
+
+  db:
+    image: postgres
+    env_file:
+      - /home/hamza/Desktop/wor/product/product/.env
+    ports:
+      - "5434:5433"
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -7,21 +20,7 @@ services:
       - .:/code
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-      - redis
     env_file:
-      - product/.env
-
-  db:
-    image: postgres:12.0-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - product/.env
-
-  redis:
-    image: redis
-
-volumes:
-  postgres_data:
+      - /home/hamza/Desktop/wor/product/product/.env
+    environment:
+      DEBUG: 'true'

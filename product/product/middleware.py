@@ -18,7 +18,7 @@ class CacheMiddleware:
             content = response.content
         
         if product:
-            print("middle ware cache called")
+            print("Middle ware cache is called")
             return response
 
         if response.status_code == 200:

@@ -11,6 +11,8 @@ from rest_framework_simplejwt.tokens import AccessToken
 from django.conf import settings
 from datetime import timedelta
 from django.contrib.auth.models import User
+from product.tasks import add
+
 
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -120,3 +122,17 @@ class TestProductViews(APITestCase):
         response = self.client.delete(f'/ab')
         self.assertEquals(response.status_code, 404)
         self.assertEquals(response.data, {"detail": "Not found."})
+
+        #Test cases for the Celery Tasks
+        response = self.client.delete(f'/{self.product_id}')
+        self.assertEquals(response.status_code, 204)
+        self.assertIsNone(Product.objects.filter(id=self.product_id).first())
+        response = self.client.delete(f'/{self.product_id}')
+
+
+
+class CeleryTestCase(APITestCase):
+    def test_add_task(self):
+        result = add.delay(2, 2)
+        self.assertTrue(result.successful())
+        self.assertEqual(result.get(), 4)

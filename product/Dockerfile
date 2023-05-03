@@ -1,14 +1,19 @@
-FROM python:3.8-slim-buster
+FROM python:3.8
+   
+ENV PYTHONUNBUFFERED 1  
 
-WORKDIR /app
+ENV DockerHOME=/home/hamza/Desktop/wor/product/product/.env
 
-COPY requirements.txt requirements.txt
+RUN mkdir -p $DockerHOME  
 
-RUN pip3 install -r requirements.txt
+WORKDIR $DockerHOME  
 
-COPY . .
+ENV PYTHONDONTWRITEBYTECODE 1
 
-EXPOSE 8000
 
-CMD ["python3". "manage.py", "runserver", "0.0.0.0:8000"]
+RUN pip install --upgrade pip  
 
+COPY . $DockerHOME  
+RUN pip install -r requirements.txt  
+EXPOSE 8000  
+CMD python manage.py runserver  
